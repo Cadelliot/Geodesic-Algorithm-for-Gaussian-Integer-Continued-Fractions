@@ -108,12 +108,21 @@ def combine_translations(word):
     return new_word
 
 # Use Lemma 6.6 to shift the kappa rotations to the end of the word
+def reduce_kappas_mod4(word):
+    kappa_count = word.count("kappa") % 4
+
+    new_word = [g for g in word if g != "kappa"]
+    new_word.extend(["kappa"] * kappa_count)
+
+    return new_word
+
 def push_kappa_to_end(word):
     new_word = []
 
     current = 0
     block_index = 0
     kappa_power = 0
+    kappa_total = 0
 
     def flush_block():
         nonlocal current, block_index
@@ -149,8 +158,9 @@ def push_kappa_to_end(word):
         elif g == "kappa":
             flush_block()
             kappa_power = (kappa_power + 1) % 4
+            kappa_total += 1
 
-    new_word.extend(["kappa"] * kappa_power)
+    new_word.extend(["kappa"] * kappa_total)
     return new_word
 
 # Truncate the word to remove unnecessary rotations and translations. Theses are invariant at infinity
@@ -350,7 +360,17 @@ def cont_frac_exp_complex(z, max_steps=10):
         reduced_word = new_word
 
     kappa_reduced = push_kappa_to_end(reduced_word)
-    truncated = truncate_at_last_phi(kappa_reduced)
+    final_reduced = kappa_reduced
+    while True:
+        new_word = cancel_phi_pairs(final_reduced)
+        new_word = combine_translations(new_word)
+
+        if new_word == final_reduced:
+            break
+
+        final_reduced = new_word
+    final_reduced = reduce_kappas_mod4(final_reduced)
+    truncated = truncate_at_last_phi(final_reduced)
 
     print("\n--- SYMBOLIC WORD ---")
     print(" ".join(symbolic_word))
@@ -358,8 +378,11 @@ def cont_frac_exp_complex(z, max_steps=10):
     print("\n--- DECOMPOSED WORD ---")
     print(present(final_word))
 
-    print("\n--- REDUCED WORD ---")
+    print("\n--- KAPPA-SHIFTED WORD ---")
     print(present(kappa_reduced))
+
+    print("\n--- REDUCED WORD ---")
+    print(present(final_reduced))
 
     print("\n--- TRUNCATED WORD ---")
     print(present(truncated))

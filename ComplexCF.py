@@ -295,7 +295,7 @@ def choose_map(z):
 #               MAIN ALGORITHM
 # ==========================================
 
-def cont_frac_exp_complex(z, max_steps=10):
+def cont_frac_exp_complex(z, max_steps=20):
 
     steps = []
     final_word = []
@@ -395,6 +395,7 @@ def cont_frac_exp_complex(z, max_steps=10):
 # ==========================================
 if __name__ == "__main__":
     user_input = input("Enter a complex number (allows for 'np' functions): ")
+    steps_input = input("Enter max steps (press Enter for default = 10): ")
     
     try:
         z = safe_eval(user_input)
@@ -402,7 +403,18 @@ if __name__ == "__main__":
         print("Invalid input:", e)
         exit()
 
-    digits, steps = cont_frac_exp_complex(z)
+    try:
+        max_steps = int(steps_input) if steps_input.strip() != "" else 10
+    except:
+        print("Invalid step count, using default = 10")
+        max_steps = 10
+    
+    if max_steps <= 0:
+        print("Steps must be positive, using default = 10")
+        max_steps = 10
+
+    digits, steps = cont_frac_exp_complex(z, max_steps=max_steps)
+
     print("\nz =", str(z).replace('j', 'i').replace('(', '').replace(')', ''))
 
     formatted_digits = [format_complex(d) for d in digits]

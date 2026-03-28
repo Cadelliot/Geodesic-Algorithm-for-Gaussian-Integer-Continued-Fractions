@@ -81,12 +81,23 @@ def cont_frac_exp_real(x, n_digits, max_steps = 10):
 
 if __name__ == "__main__":
     user_input = input("Enter a real number (allows for 'np' functions): ")
+    steps_input = input("Enter max steps (press Enter for default = 10): ")
 
     try:
         x = eval(user_input, {"__builtins__": None}, {"np": np})
     except Exception as e:
         print("Invalid input:", e)
         exit()
+
+    try:
+        max_steps = int(steps_input) if steps_input.strip() != "" else 10
+    except:
+        print("Invalid step count, using default = 10")
+        max_steps = 10
+    
+    if max_steps <= 0:
+        print("Steps must be positive, using default = 10")
+        max_steps = 10
 
     digits, steps = cont_frac_exp_real(x, n_digits = 10)
     print("x =", x)

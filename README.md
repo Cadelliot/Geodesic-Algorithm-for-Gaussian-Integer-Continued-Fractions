@@ -1,4 +1,4 @@
-# Geodesic-Algorithm-for-Gaussian-Integer-Continued-Fractions
+# Geodesic Algorithm for Gaussian Integer Continued Fractions
 This contains a Python implementation of a geodesic algorithm for computing Gaussian integer continued fractions (GICFs), developed in my fourth-year mathematics dissertation.
 
 ## Overview
@@ -8,7 +8,7 @@ The algorithm extends the correspondence between continued fractions of real num
 ## Contents
 
 - `RealCF.py`
-<br> Implementation of the classical continued fraction algorithm for real numbers.
+<br> Implementation of the classical continued fraction algorithm for real numbers, included for completeness.
 
 - `ComplexCF.py`
 <br> Implementation of a geodesic algorithm for Gaussian integer continued fractions. Also provided in the output of this code are the stages of simplifying a word over translations, inversions and rotations to allow us to read the expansion.

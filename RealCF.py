@@ -16,7 +16,7 @@ epsilon = 1e-10
 def mobius(M, x):
     a, b, c, d = M.ravel()
     if abs(c*x + d) < epsilon:
-        return ('inf')
+        return np.inf
     else:
         return (a*x + b) / (c*x + d)
     
@@ -24,7 +24,7 @@ def mobius(M, x):
 #               MAIN ALGORITHM
 # ==========================================
 
-def cont_frac_exp_real(x, n_digits, max_steps = 10):
+def cont_frac_exp_real(x, max_steps = 10):
     M = np.eye(2)
     digits = []
     steps = []
@@ -39,7 +39,7 @@ def cont_frac_exp_real(x, n_digits, max_steps = 10):
             break
 
         if x > 0:
-            a = int(np.floor(x))
+            a = int(np.floor(x + epsilon))
             digits.append(a)
 
             T_inv_a = np.array([[1, -a], [0,  1]])
@@ -55,7 +55,7 @@ def cont_frac_exp_real(x, n_digits, max_steps = 10):
             record_step()
 
         else:
-            a = int(np.floor(-x))
+            a = int(np.floor(-x + epsilon))
             digits.append(a)
 
             T_a = np.array([[1, a], [0,  1]])
@@ -70,9 +70,6 @@ def cont_frac_exp_real(x, n_digits, max_steps = 10):
             M = S @ M
             record_step()
 
-        if len(digits) >= n_digits:
-            break
-
     return digits, steps
 
 # ==========================================
@@ -81,7 +78,7 @@ def cont_frac_exp_real(x, n_digits, max_steps = 10):
 
 if __name__ == "__main__":
     user_input = input("Enter a real number (allows for 'np' functions): ")
-    steps_input = input("Enter max steps (press Enter for default = 10): ")
+    steps_input = input("Enter maximum iterations of the algorithm (press Enter for default = 10): ")
 
     try:
         x = eval(user_input, {"__builtins__": None}, {"np": np})
@@ -99,7 +96,7 @@ if __name__ == "__main__":
         print("Steps must be positive, using default = 10")
         max_steps = 10
 
-    digits, steps = cont_frac_exp_real(x, n_digits = 10)
+    digits, steps = cont_frac_exp_real(x, max_steps = max_steps)
     print("x =", x)
 
     if digits:

@@ -2,7 +2,6 @@ import numpy as np
 
 # Allow mathematical inputs to find continued fractions of
 def safe_eval(input):
-    input = input.replace("i", "j")    # allow i instead of j for complex
     return complex(eval(input, {"__builtins__": None}, {"np": np}))
 
 # ==============================
@@ -393,9 +392,14 @@ def cont_frac_exp_complex(z, max_steps=20):
 # ==========================================
 #           ALLOWS NUMERICAL INPUT
 # ==========================================
+
+GREEN = "\033[92m"
+BLUE = "\033[96m"
+RESET = "\033[0m"
+
 if __name__ == "__main__":
-    user_input = input("Enter a complex number (allows for 'np' functions): ")
-    steps_input = input("Enter max steps (press Enter for default = 10): ")
+    user_input = input(f"{GREEN}Enter a complex number (imaginary unit i=1j):{RESET} ")
+    steps_input = input(f"{GREEN}Enter maximum iterations of the algorithm:{RESET} ")
     
     try:
         z = safe_eval(user_input)
@@ -426,9 +430,9 @@ if __name__ == "__main__":
     else:
         output = "[]"
 
-    print("Continued Fraction Digits:", output)
+    print(f"{BLUE}Continued Fraction Digits: {output}{RESET}")
 
-    # Write the continued fraction
+    # LaTeX output for the continued fraction
     array = formatted_digits.copy()
     text=''
 
@@ -442,4 +446,4 @@ if __name__ == "__main__":
         i+=1
 
     text = r'\['+text[:-10-i]+text[-i+1:]+r'\]'
-    print(text)
+    print("LaTeX Output:", text)
